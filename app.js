@@ -10,8 +10,7 @@ app.go = (function(){
 			primes_to_find = 1000000,
 			largest_processed = 0,
 			batch_size = 1000,
-			batches_sent = 0,
-			batches_pending = 0;
+			batches_sent = 0;
 
 		// Spin up the workers
 		var requestBatch = function( message ) {
@@ -19,7 +18,6 @@ app.go = (function(){
 			if ( message.data != null ) {
 				Array.prototype.push.apply( primes, message.data.found_primes );
 				largest_processed = Math.max( largest_processed, message.data.end );
-				batches_pending--;
 			}
 
 			// What do we tell the worker
@@ -27,10 +25,6 @@ app.go = (function(){
 				// First one is a special case, start processing at 2
 				this.postMessage( { start: 2, end: batch_size, primes: primes } );
 				batches_sent++;
-				batches_pending++;
-			} else if ( batches_pending > 0 ) {
-				// Need to wait for all pending batches to complete before sending new ones
-				this.postMessage( false );
 			} else if ( batches_sent === primes_to_find / batch_size ) {
 				// We've processed them all, shut down worker
 				this.terminate();
@@ -39,7 +33,6 @@ app.go = (function(){
 			} else if ( largest_processed >= Math.sqrt( batches_sent * batch_size ) ) {
 				// We have head room to continue processing )
 				this.postMessage( { start: batches_sent * batch_size + 1, end: (++batches_sent) * batch_size + 1, primes: primes } );
-				batches_pending++;
 			} else {
 				// Haven't processed enough numbers yet, tell worker to wait
 				this.postMessage( false );
