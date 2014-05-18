@@ -36,3 +36,5 @@ with the workers as they send back results. The relevant section for joining on 
 spins up the requested workers and then it simply `yields` inside a while loop. The generator is called again on [line
 38](https://github.com/chandlerprall/WebWorkerJoining/blob/master/app.js#L38) every time a worker is terminated, each time checking to see if there are any remaining workers. When there are no
 more workers the generator loop is finally broken and the final results are displayed on the page.
+
+[Want to see it in action](http://chandlerprall.github.io/WebWorkerJoining/)? Generator functions are currently implemented in Firefox, and behind the `Enable Experimental Javascript` / `#enable-javascript-harmony` flag in Chrome.
