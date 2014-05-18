@@ -32,7 +32,7 @@ the app when it requests a batch after the last one has been sent.
 
 We start by creating a generator function which will act as the main thread. In `app.js` I got creative and named this
 function `joiner`. It does everything from state management to worker creation, and contains the logic for communicating
-with the workers as they send back results. The relevant section for joining on the threads is on lines 49-63. `joiner`
-spins up the requested workers and then it simply `yields` inside a while loop. The generator is called again on line
-38 every time a worker is terminated, each time checking to see if there are any remaining workers. When there are no
+with the workers as they send back results. The relevant section for joining on the threads is on [lines 49-63](https://github.com/chandlerprall/WebWorkerJoining/blob/master/app.js#L49-63). `joiner`
+spins up the requested workers and then it simply `yields` inside a while loop. The generator is called again on [line
+38](https://github.com/chandlerprall/WebWorkerJoining/blob/master/app.js#L38) every time a worker is terminated, each time checking to see if there are any remaining workers. When there are no
 more workers the generator loop is finally broken and the final results are displayed on the page.
